@@ -4,15 +4,22 @@ import {
   Action,
   ThunkAction,
 } from "@reduxjs/toolkit";
-import counter from "./slices/counter";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas/rootSaga";
+import todos from "./slices/todos";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
-  counter,
+  todos,
 });
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: [sagaMiddleware],
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type StateType = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
