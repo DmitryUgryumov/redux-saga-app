@@ -14,12 +14,13 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-export type StateType = ReturnType<typeof rootReducer>;
-export type ThunkType<R = void, A extends Action = Action> = ThunkAction<
-  R,
+export type StateType = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
   StateType,
-  any,
-  A
+  unknown,
+  Action<string>
 >;
 
 export { store };

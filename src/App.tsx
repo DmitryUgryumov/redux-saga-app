@@ -16,17 +16,7 @@ const App = () => {
       <br />
       <button onClick={() => dispatch(plusCounter())}>Plus</button>
       <button onClick={() => dispatch(minusCounter())}>Minus</button>
-      <button
-        onClick={() =>
-          dispatch(
-            customCounter({
-              counter: 100,
-            }),
-          )
-        }
-      >
-        100
-      </button>
+      <button onClick={() => dispatch(customCounter(100))}>100</button>
     </div>
   );
 };
