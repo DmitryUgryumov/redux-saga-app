@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all, select } from "@redux-saga/core/effects";
+import { takeEvery, put, call, all, select } from "typed-redux-saga";
 import {
   setNewTodos,
   setLoading,
@@ -15,7 +15,7 @@ import { StateType } from "../store";
 
 export function* getTodos() {
   try {
-    const { _start, _limit } = yield select((state: StateType) => state.todos);
+    const { _start, _limit } = yield* select((state: StateType) => state.todos);
 
     yield put(
       setLoading({
@@ -23,8 +23,7 @@ export function* getTodos() {
         isSubLoading: true,
       }),
     );
-    // TODO https://www.npmjs.com/package/typed-redux-saga
-    const todos: ITodo[] = yield call(getTodosApi, {
+    const todos = yield* call(getTodosApi, {
       _start,
       _limit,
     });
@@ -52,8 +51,7 @@ export function* changeTodoStatus(action: { type: string; payload: ITodo }) {
         id: action.payload.id,
       }),
     );
-    // TODO https://www.npmjs.com/package/typed-redux-saga
-    const todo: ITodo = yield call(changeTodoStatusApi, action.payload);
+    const todo = yield* call(changeTodoStatusApi, action.payload);
     yield put(changeTodoCompleted(todo));
   } catch (error) {
     yield put(setError(true));
@@ -68,7 +66,7 @@ export function* changeTodoStatus(action: { type: string; payload: ITodo }) {
 }
 
 export default function* rootSaga() {
-  yield all([
+  yield* all([
     takeEvery(GET_TODOS, getTodos),
     takeEvery(CHANGE_TODO_COMPLETED, changeTodoStatus),
   ]);
