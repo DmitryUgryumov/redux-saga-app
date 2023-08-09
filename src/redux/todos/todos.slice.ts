@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ITodo } from "../../interfaces/todo";
+import { ITodo } from "../../interfaces/todo.interface";
 
 interface IState {
   todos: ITodo[];

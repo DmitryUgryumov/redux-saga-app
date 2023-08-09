@@ -1,7 +1,7 @@
-import { ITodo } from "../interfaces/todo";
+import { ITodo } from "../interfaces/todo.interface";
 import axios from "axios";
 
-export const changeTodoStatus = async (todo: ITodo): Promise<ITodo> => {
+export const changeTodoStatusApi = async (todo: ITodo): Promise<ITodo> => {
   const { data } = await axios.put<ITodo>(
     `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
     {

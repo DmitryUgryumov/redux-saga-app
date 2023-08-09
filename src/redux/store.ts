@@ -5,8 +5,8 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "./sagas/rootSaga";
-import todos from "./slices/todos";
+import rootSaga from "./rootSaga";
+import todos from "./todos/todos.slice";
 
 const sagaMiddleware = createSagaMiddleware();
 

@@ -1,12 +1,12 @@
 import axios from "axios";
-import { ITodo } from "../interfaces/todo";
+import { ITodo } from "../interfaces/todo.interface";
 
 interface IParams {
   _start?: number;
   _limit?: number;
 }
 
-export const getTodos = async (params: IParams): Promise<ITodo[]> => {
+export const getTodosApi = async (params: IParams): Promise<ITodo[]> => {
   const { data } = await axios.get<ITodo[]>(
     "https://jsonplaceholder.typicode.com/todos",
     {

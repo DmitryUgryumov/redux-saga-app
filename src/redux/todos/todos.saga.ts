@@ -1,19 +1,19 @@
-import { takeEvery, put, call, all, select } from "typed-redux-saga";
+import { all, call, put, select, takeEvery } from "typed-redux-saga";
+import { CHANGE_TODO_COMPLETED, GET_TODOS } from "./todos.types";
+import { ITodo } from "../../interfaces/todo.interface";
 import {
-  setNewTodos,
-  setLoading,
-  setStartParam,
-  setError,
   changeTodoCompleted,
+  setError,
+  setLoading,
+  setNewTodos,
+  setStartParam,
   setTodoWithChange,
-} from "../slices/todos";
-import { getTodos as getTodosApi } from "../../api/getTodos";
-import { changeTodoStatus as changeTodoStatusApi } from "../../api/changeTodoStatus";
-import { ITodo } from "../../interfaces/todo";
-import { CHANGE_TODO_COMPLETED, GET_TODOS } from "../types/todos";
+} from "./todos.slice";
+import { changeTodoStatusApi as changeTodoStatusApi } from "../../api/changeTodoStatus.api";
 import { StateType } from "../store";
+import { getTodosApi as getTodosApi } from "../../api/getTodos.api";
 
-export function* getTodos() {
+function* getTodos() {
   try {
     const { _start, _limit } = yield* select((state: StateType) => state.todos);
 
@@ -43,7 +43,7 @@ export function* getTodos() {
   }
 }
 
-export function* changeTodoStatus(action: { type: string; payload: ITodo }) {
+function* changeTodoStatus(action: { type: string; payload: ITodo }) {
   try {
     yield put(
       setTodoWithChange({
@@ -65,7 +65,7 @@ export function* changeTodoStatus(action: { type: string; payload: ITodo }) {
   }
 }
 
-export default function* rootSaga() {
+export function* todosSaga() {
   yield* all([
     takeEvery(GET_TODOS, getTodos),
     takeEvery(CHANGE_TODO_COMPLETED, changeTodoStatus),

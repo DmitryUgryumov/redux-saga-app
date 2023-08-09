@@ -1,21 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
-import { StateType } from "../../store/store";
-import { CHANGE_TODO_COMPLETED, GET_TODOS } from "../../store/types/todos";
+import {
+  CHANGE_TODO_COMPLETED,
+  GET_TODOS,
+} from "../../redux/todos/todos.types";
 import FetchButton from "./FetchButton/FetchButton";
 import "./TodoList.css";
+import {
+  selectIsError,
+  selectIsMainLoading,
+  selectIsSubLoading,
+  selectTodos,
+  selectTodosWithChanges,
+} from "../../redux/todos/todos.selectors";
 
 const TodoList = () => {
-  const todos = useSelector((state: StateType) => state.todos.todos);
-  const isMainLoading = useSelector(
-    (state: StateType) => state.todos.isMainLoading,
-  );
-  const isSubLoading = useSelector(
-    (state: StateType) => state.todos.isSubLoading,
-  );
-  const isError = useSelector((state: StateType) => state.todos.isError);
-  const todosWithChange = useSelector(
-    (state: StateType) => state.todos.todosWithChanges,
-  );
+  const todos = useSelector(selectTodos);
+  const isMainLoading = useSelector(selectIsMainLoading);
+  const isSubLoading = useSelector(selectIsSubLoading);
+  const isError = useSelector(selectIsError);
+  const todosWithChange = useSelector(selectTodosWithChanges);
 
   const dispatch = useDispatch();
 
