@@ -1,0 +1,19 @@
+.list-container {
+  padding: 30px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0;
+  margin-bottom: 20px;
+}
+
+.todo-item-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+}

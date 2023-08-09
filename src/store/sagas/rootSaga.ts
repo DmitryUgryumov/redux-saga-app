@@ -4,10 +4,13 @@ import {
   setLoading,
   setStartParam,
   setError,
+  changeTodoCompleted,
+  setTodoWithChange,
 } from "../slices/todos";
-import { getTodos as getTodosApi } from "../../api/todos";
+import { getTodos as getTodosApi } from "../../api/getTodos";
+import { changeTodoStatus as changeTodoStatusApi } from "../../api/changeTodoStatus";
 import { ITodo } from "../../interfaces/todo";
-import { GET_TODOS } from "../types/todos";
+import { CHANGE_TODO_COMPLETED, GET_TODOS } from "../types/todos";
 import { StateType } from "../store";
 
 export function* getTodos() {
@@ -20,6 +23,7 @@ export function* getTodos() {
         isSubLoading: true,
       }),
     );
+    // TODO https://www.npmjs.com/package/typed-redux-saga
     const todos: ITodo[] = yield call(getTodosApi, {
       _start,
       _limit,
@@ -40,7 +44,32 @@ export function* getTodos() {
   }
 }
 
+export function* changeTodoStatus(action: { type: string; payload: ITodo }) {
+  try {
+    yield put(
+      setTodoWithChange({
+        isAddId: true,
+        id: action.payload.id,
+      }),
+    );
+    // TODO https://www.npmjs.com/package/typed-redux-saga
+    const todo: ITodo = yield call(changeTodoStatusApi, action.payload);
+    yield put(changeTodoCompleted(todo));
+  } catch (error) {
+    yield put(setError(true));
+  } finally {
+    yield put(
+      setTodoWithChange({
+        isAddId: false,
+        id: action.payload.id,
+      }),
+    );
+  }
+}
+
 export default function* rootSaga() {
-  yield takeEvery(GET_TODOS, getTodos);
-  // yield all([takeEvery(GET_TODOS, getTodos)]);
+  yield all([
+    takeEvery(GET_TODOS, getTodos),
+    takeEvery(CHANGE_TODO_COMPLETED, changeTodoStatus),
+  ]);
 }

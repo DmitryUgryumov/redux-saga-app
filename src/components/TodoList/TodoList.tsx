@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { StateType } from "../../store/store";
-import { GET_TODOS } from "../../store/types/todos";
+import { CHANGE_TODO_COMPLETED, GET_TODOS } from "../../store/types/todos";
 import FetchButton from "./FetchButton/FetchButton";
+import "./TodoList.css";
 
 const TodoList = () => {
   const todos = useSelector((state: StateType) => state.todos.todos);
@@ -12,6 +13,10 @@ const TodoList = () => {
     (state: StateType) => state.todos.isSubLoading,
   );
   const isError = useSelector((state: StateType) => state.todos.isError);
+  const todosWithChange = useSelector(
+    (state: StateType) => state.todos.todosWithChanges,
+  );
+
   const dispatch = useDispatch();
 
   const getTodos = () => {
@@ -38,10 +43,31 @@ const TodoList = () => {
   }
 
   return (
-    <div>
-      <ul>
+    <div className="list-container">
+      <ul className="list">
         {todos.map((todo, index) => (
-          <li key={todo.id}>{`${index + 1}. ${todo.title}`}</li>
+          <li
+            key={todo.id}
+            className={
+              todosWithChange.includes(todo.id) ? "todo-item-disabled" : ""
+            }
+          >
+            <label
+              htmlFor={todo.id.toString()}
+              className={todo.completed ? "todo-completed" : ""}
+            >{`${index + 1}. ${todo.title}`}</label>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              id={todo.id.toString()}
+              onChange={() => {
+                dispatch({
+                  type: CHANGE_TODO_COMPLETED,
+                  payload: todo,
+                });
+              }}
+            />
+          </li>
         ))}
       </ul>
       <FetchButton

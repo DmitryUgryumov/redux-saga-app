@@ -5,6 +5,7 @@ interface IState {
   todos: ITodo[];
   isMainLoading: boolean;
   isSubLoading: boolean;
+  todosWithChanges: number[];
   isError: boolean;
   _start: number;
   _limit: number;
@@ -13,6 +14,7 @@ interface IState {
 const initialState: IState = {
   todos: [],
   isMainLoading: false,
+  todosWithChanges: [],
   isSubLoading: false,
   isError: false,
   _start: 0,
@@ -43,10 +45,45 @@ export const todosSlice = createSlice({
     setError: (state, action: PayloadAction<boolean>) => {
       state.isError = action.payload;
     },
+    changeTodoCompleted: (state, action: PayloadAction<ITodo>) => {
+      state.todos = state.todos.map((todo) =>
+        todo.id === action.payload.id
+          ? {
+              ...todo,
+              completed: !todo.completed,
+            }
+          : todo,
+      );
+    },
+    setTodoWithChange: (
+      state,
+      action: PayloadAction<{
+        id: number;
+        isAddId: boolean;
+      }>,
+    ) => {
+      const { id, isAddId } = action.payload;
+
+      if (isAddId) {
+        state.todosWithChanges.push(id);
+        return;
+      }
+
+      state.todosWithChanges = state.todosWithChanges.filter(
+        (todoId) => todoId !== id,
+      );
+    },
   },
 });
 
 const { actions, reducer } = todosSlice;
 
-export const { setNewTodos, setLoading, setStartParam, setError } = actions;
+export const {
+  setNewTodos,
+  setLoading,
+  setStartParam,
+  setError,
+  changeTodoCompleted,
+  setTodoWithChange,
+} = actions;
 export default reducer;

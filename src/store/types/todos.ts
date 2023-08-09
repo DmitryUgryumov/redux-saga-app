@@ -1,1 +1,2 @@
 export const GET_TODOS = "GET_TODOS";
+export const CHANGE_TODO_COMPLETED = "CHANGE_TODO_COMPLETED";
